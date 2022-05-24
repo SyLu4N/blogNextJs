@@ -1,1 +1,41 @@
-// TODO
+.container{
+  max-width: 700px;
+}
+
+.content{
+
+  h1{
+    margin-top: 4rem;
+    color: var(--letter);
+    font-size: 3rem;
+  }
+
+  img{
+    float: inline-start;
+    margin: 0 -20rem;
+  }
+
+  div {
+    margin-top: 1.6rem;
+    color: var(--info);
+
+    font-size: 0.9rem;
+
+    span, time, p {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 1rem;
+
+      svg {
+        margin-right: 0.3rem;
+      }
+    }
+  }
+}
+
+.postContent{
+  p {
+    line-height: 1.5rem;
+    margin-top: 1rem;
+  }
+}

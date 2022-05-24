@@ -1,8 +1,10 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetStaticProps } from 'next';
+import Link from 'next/link';
+import { RichText } from 'prismic-dom';
 import { useState } from 'react';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { FiUser } from 'react-icons/fi';
-import { Header } from '../components/Header';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 import { getPrismicClient } from '../services/prismic';
 import styles from './home.module.scss';
@@ -12,7 +14,6 @@ interface Post {
   data: {
     title: string;
     subtitle: string;
-    banner: string;
     author: string;
     content: {
       heading: string;
@@ -22,36 +23,91 @@ interface Post {
   updateAt: string;
 }
 
-interface PostPagination {
+interface PagePosts {
   next_page: string;
-  posts: Post[];
+  results: Post[];
 }
 
 interface HomeProps {
-  postsPagination: PostPagination;
+  pageProps: PagePosts;
 }
 
-export default function Home({ posts }): JSX.Element {
-  const [teste, setTeste] = useState<Post[]>(posts);
+export default function Home({ pageProps }: HomeProps): JSX.Element {
+  const [posts, setPosts] = useState<Post[]>(pageProps.results);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handlePosts(): Promise<void> {
+    if (!pageProps.next_page) {
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const nextPage = await (await fetch(pageProps.next_page)).json();
+
+      if (nextPage.page <= posts.length) {
+        setIsLoading(false);
+        return;
+      }
+
+      const newPosts = nextPage.results.map((post): Post => {
+        return {
+          slug: post.uid,
+          data: {
+            title: RichText.asText(post.data.title),
+            subtitle: post.data.subtitle,
+            author: post.data.author,
+            content: post.data.content,
+          },
+          updateAt: new Date(post.last_publication_date).toLocaleString(
+            'pt-br',
+            {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+            }
+          ),
+        };
+      });
+
+      setTimeout(() => {
+        setPosts([...posts, ...newPosts]);
+        setIsLoading(false);
+      }, 2000);
+    } catch {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <>
-      <Header />
       <section className={styles.section}>
-        {teste.map(post => (
-          <article key={posts.slug}>
-            <h1>{post.data.title}</h1>
-            <p>{post.data.subtitle}</p>
-            <div>
-              <time>
-                <AiOutlineCalendar size={20} /> {post.updateAt}
-              </time>{' '}
-              <span>
-                <FiUser size={20} /> {post.data.author}
-              </span>
-            </div>
+        {posts.map(post => (
+          <article key={post.slug}>
+            <Link href={`/post/${post.slug}`}>
+              <a>
+                <h1>{post.data.title}</h1>
+                <p>{post.data.subtitle}</p>
+                <div>
+                  <time>
+                    <AiOutlineCalendar size={20} /> {post.updateAt}
+                  </time>{' '}
+                  <span>
+                    <FiUser size={20} /> {post.data.author}
+                  </span>
+                </div>
+              </a>
+            </Link>
           </article>
         ))}
+        <button type="button" onClick={handlePosts} disabled={isLoading}>
+          {isLoading ? (
+            <>
+              Carregando... <AiOutlineLoading3Quarters className="loading" />
+            </>
+          ) : (
+            'Carregar posts'
+          )}
+        </button>
       </section>
     </>
   );
@@ -75,25 +131,27 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
       slug: post.uid,
       data: {
-        title: post.data.title,
+        title: RichText.asText(post.data.title),
         subtitle: post.data.subtitle,
         author: post.data.author,
-        banner: post.data.banner,
         content: post.data.content,
       },
       updateAt: new Date(post.last_publication_date).toLocaleString('pt-br', {
         day: '2-digit',
-        month: 'long',
+        month: 'short',
         year: 'numeric',
       }),
     };
   });
 
-  console.log(JSON.stringify(posts, null, 2), res.next_page);
+  const pageProps = {
+    results: posts,
+    next_page: res.next_page,
+  };
 
   return {
     props: {
-      posts,
+      pageProps,
     },
   };
 };
