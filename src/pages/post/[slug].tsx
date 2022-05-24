@@ -1,6 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { RichText } from 'prismic-dom';
-import React, { useState } from 'react';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { FiUser } from 'react-icons/fi';
 import { BiTime } from 'react-icons/bi';
@@ -8,6 +7,11 @@ import { BiTime } from 'react-icons/bi';
 import { getPrismicClient } from '../../services/prismic';
 
 import styles from './post.module.scss';
+
+interface Content {
+  heading: string;
+  body: string;
+}
 
 interface Post {
   slug: string;
@@ -21,13 +25,11 @@ interface Post {
     };
     content: {
       heading: string;
-      body: {
-        text: string;
-      }[];
+      body: string;
     }[];
   };
-  updateAt: string;
-  creatAt: string;
+  updatedAt: string;
+  createdAt: string;
 }
 
 interface PostProps {
@@ -43,30 +45,23 @@ export default function Post({ post }: PostProps): JSX.Element {
           <h1>{post.data.title}</h1>
           <div>
             <time>
-              <AiOutlineCalendar size={20} /> {post.updateAt}
+              <AiOutlineCalendar size={20} /> {post.updatedAt}
             </time>{' '}
             <span>
               <FiUser size={20} /> {post.data.author}
             </span>
             <p>
-              <BiTime size={20} /> {post.creatAt} min
+              <BiTime size={20} /> {post.createdAt} min
             </p>
           </div>
         </header>
-        <article>
-          <div className={styles.postContent}>
-            {post.data.content.map(({ heading, body }) => (
-              <div key={`${heading}-${Math.random()}`}>
-                <h2>{heading}</h2>
-                {body.map(({ text }) => (
-                  <React.Fragment key={text}>
-                    <p>{text}</p>
-                    <br />
-                  </React.Fragment>
-                ))}
-              </div>
-            ))}
-          </div>
+        <article className={styles.postContent}>
+          {post.data.content.map(valor => (
+            <div key={valor.heading + post.slug}>
+              <h1>{valor.heading}</h1>
+              <div dangerouslySetInnerHTML={{ __html: valor.body }} />
+            </div>
+          ))}
         </article>
       </aside>
     </div>
@@ -84,7 +79,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const prismic = getPrismicClient({});
 
   const { slug } = params;
-  console.log(slug);
 
   if (slug === 'favicon.png') {
     return {
@@ -107,14 +101,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         alt: res.data.banner.alt,
         url: res.data.banner.url,
       },
-      content: res.data.content,
+      content: res.data.content.map((valor: Content) => {
+        return {
+          heading: valor.heading,
+          body: RichText.asHtml(valor.body),
+        };
+      }),
     },
-    updateAt: new Date(res.last_publication_date).toLocaleString('pt-br', {
+    updatedAt: new Date(res.last_publication_date).toLocaleString('pt-br', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
     }),
-    creatAt: new Date(res.first_publication_date).toLocaleString('pt-br', {
+    createdAt: new Date(res.first_publication_date).toLocaleString('pt-br', {
       minute: '2-digit',
     }),
   };

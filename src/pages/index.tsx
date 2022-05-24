@@ -33,23 +33,25 @@ interface HomeProps {
 }
 
 export default function Home({ pageProps }: HomeProps): JSX.Element {
+  const [nextPage, setNextPage] = useState(pageProps.next_page);
   const [posts, setPosts] = useState<Post[]>(pageProps.results);
   const [isLoading, setIsLoading] = useState(false);
 
   async function handlePosts(): Promise<void> {
-    if (!pageProps.next_page) {
+    if (!nextPage) {
       return;
     }
+
     try {
       setIsLoading(true);
-      const nextPage = await (await fetch(pageProps.next_page)).json();
+      const newNextPage = await (await fetch(nextPage)).json();
 
-      if (nextPage.page <= posts.length) {
+      if (newNextPage.page <= posts.length) {
         setIsLoading(false);
         return;
       }
 
-      const newPosts = nextPage.results.map((post): Post => {
+      const newPosts = newNextPage.results.map((post): Post => {
         return {
           slug: post.uid,
           data: {
@@ -70,6 +72,7 @@ export default function Home({ pageProps }: HomeProps): JSX.Element {
       });
 
       setTimeout(() => {
+        setNextPage(newNextPage.next_page);
         setPosts([...posts, ...newPosts]);
         setIsLoading(false);
       }, 2000);
@@ -99,15 +102,17 @@ export default function Home({ pageProps }: HomeProps): JSX.Element {
             </Link>
           </article>
         ))}
-        <button type="button" onClick={handlePosts} disabled={isLoading}>
-          {isLoading ? (
-            <>
-              Carregando... <AiOutlineLoading3Quarters className="loading" />
-            </>
-          ) : (
-            'Carregar posts'
-          )}
-        </button>
+        {nextPage && (
+          <button type="button" onClick={handlePosts} disabled={isLoading}>
+            {isLoading ? (
+              <>
+                Carregando... <AiOutlineLoading3Quarters className="loading" />
+              </>
+            ) : (
+              'Carregar posts'
+            )}
+          </button>
+        )}
       </section>
     </>
   );

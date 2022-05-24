@@ -36,4 +36,17 @@ h1 {
   font-weight: 700;
 }
 
+a {
+  text-decoration: none;
+}
+
+::-webkit-scrollbar-track  {
+  color: yellow;
+  background-color: yellow;
+}
+
+body::-webkit-scrollbar-thumb {
+  color: white;
+  background-color: yellow;
+}
 
