@@ -47,7 +47,9 @@ export default function Post({ post }: PostProps): JSX.Element {
       <div className={styles.container}>
         <aside className={styles.content}>
           <header>
-            <img src={post.data.banner.url} alt={post.data.banner.alt} />
+            <div className={styles.imgContainer}>
+              <img src={post.data.banner.url} alt={post.data.banner.alt} />
+            </div>
             <h1>{post.data.title}</h1>
             <div>
               <time>
