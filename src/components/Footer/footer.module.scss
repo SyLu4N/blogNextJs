@@ -1,0 +1,20 @@
+.footer{
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  padding: 0.2rem;
+  background-color: rgba(0, 0, 0, 0.692);
+
+  text-align: center;
+  color: var(--info);
+  a{
+    font-style: italic;
+    margin-left: 0.4rem;
+    color: var(--info);
+
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+}

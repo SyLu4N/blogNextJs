@@ -1,0 +1,68 @@
+.section{
+  max-width: 700px;
+
+  a{
+    text-decoration: none;
+
+    &:hover h1{
+      color: var(--pink);
+    }
+  }
+
+  article{
+    padding-bottom: 1.5rem;
+    padding-top: 1.5rem;
+
+    h1{
+      color: var(--letter);
+      margin-bottom: 0.6rem;
+      transition: 300ms color;
+
+      line-height: 2.1rem;
+      font-size: 1.8rem;
+    }
+
+    p {
+      color: var(--body);
+
+      font-size: 1.1rem;
+      line-height: 1.3rem;
+    }
+
+    div {
+      margin-top: 1.6rem;
+      color: var(--info);
+
+      font-size: 0.9rem;
+
+      span, time {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 1rem;
+
+        svg {
+          margin-right: 0.3rem;
+        }
+      }
+    }
+  }
+
+  article + article {
+    border-top: 1px solid rgb(40, 44, 53);
+    animation: inicial 600ms linear;
+  }
+
+
+  @keyframes inicial {
+    0%{
+      margin-left: -5%;
+      opacity: 0;
+    }
+
+    100%{
+      margin-left: 0;
+      opacity: 1;
+    }
+  }
+}
+

@@ -1,0 +1,10 @@
+.loading{
+    margin-left: 1rem;
+    animation: rotate 600s infinite linear;
+}
+
+@keyframes rotate {
+  0%{
+    transform: rotate(600000deg);
+  }
+}
