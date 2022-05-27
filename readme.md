@@ -23,7 +23,7 @@
  <h3>📚 Código</h3>
  <h6 align="center">
     <a href="https://newspacetraveling.vercel.app/">
-      <img src="./codeSpace.gif" alt="Código da aplicação" />
+      <img src="./assetsReadme/codigo.gif" alt="Código da aplicação" />
     </a>
   </h6>
 
