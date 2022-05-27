@@ -26,6 +26,7 @@
       <img src="./assetsReadme/codigo.gif" alt="Código da aplicação" />
     </a>
   </h6>
+  <h2></h2>
 
   <h3>Link para o site</h3>
   <p>https://newspacetraveling.vercel.app/</p>
