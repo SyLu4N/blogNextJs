@@ -14,17 +14,19 @@
  <h3>📚 Funcionamento</h3>
 
  <h6 align="center">
-   <a href="https://www.linkedin.com/feed/update/urn:li:activity:6934939812609015808/">
-    <img src="./spacetraveling.gif" alt="Funcionamento" />
+   <a href="https://newspacetraveling.vercel.app/">
+    <img src="./assetsReadme/app.gif" alt="Funcionamento" />
    </a>
  </h6>
  <h2></h2>
 
  <h3>📚 Código</h3>
  <h6 align="center">
-    <a href="https://www.linkedin.com/feed/update/urn:li:activity:6934939812609015808/">
+    <a href="https://newspacetraveling.vercel.app/">
       <img src="./codeSpace.gif" alt="Código da aplicação" />
     </a>
   </h6>
-g
+
+  <p>https://newspacetraveling.vercel.app/</p>
+
 
