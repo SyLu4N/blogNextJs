@@ -23,8 +23,10 @@ export function ButtonSignIn(): JSX.Element {
       className={styles.singInButton}
       onClick={() => signIn('github')}
     >
-      <FaGithub color="#eba417" />
-      Login com GitHub
+      <p>
+        <FaGithub color="#eba417" />
+      </p>
+      <p>Login com GitHub</p>
     </button>
   );
 }

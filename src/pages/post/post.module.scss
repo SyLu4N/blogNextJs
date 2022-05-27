@@ -10,13 +10,7 @@
     font-size: 3rem;
   }
 
-  img{
-    float: inline-start;
-    margin: 0 -20rem;
-  }
-
   div {
-    margin-top: 1.6rem;
     color: var(--info);
 
     font-size: 0.9rem;
@@ -39,5 +33,18 @@
     margin-top: 1rem;
 
     font-size: 1.2rem;
+  }
+}
+
+.imgContainer{
+  overflow: hidden;
+  height: 28vw;
+
+  img{
+    display: block;
+    position: absolute;
+    right: 0;
+    left: 0;
+    width: 100%;
   }
 }

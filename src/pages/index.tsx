@@ -1,5 +1,6 @@
 import { GetStaticProps } from 'next';
 import { RichText } from 'prismic-dom';
+import Head from 'next/head';
 
 import { getPrismicClient } from '../services/prismic';
 import { Section } from '../components/Section';
@@ -28,7 +29,15 @@ interface HomeProps {
 }
 
 export default function Home({ pageProps }: HomeProps): JSX.Element {
-  return <Section pageProps={pageProps} />;
+  return (
+    <>
+      <Head>
+        <title>Spacetraveling.</title>
+      </Head>
+
+      <Section pageProps={pageProps} />
+    </>
+  );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
